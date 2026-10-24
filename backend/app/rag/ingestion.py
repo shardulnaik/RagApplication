@@ -61,6 +61,8 @@ def ingest_document(filename: str, file_bytes: bytes):
                 "file_name": filename,
                 "source": filename,
                 "file_type": extension.lstrip("."),
+                "active_document": "true",
+                "active_document_id": document_id,
             }
         )
 
