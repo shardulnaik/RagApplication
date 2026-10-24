@@ -1,0 +1,355 @@
+/* Document upload */
+
+.document-uploader {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.upload-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 10px;
+    border: 1px dashed #59647c;
+    border-radius: 10px;
+    background: #1d2739;
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 600;
+    transition:
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.upload-button:hover:not(:disabled) {
+    border-color: #a5b4fc;
+    background: #27334b;
+}
+
+.upload-button:disabled {
+    cursor: wait;
+    opacity: 0.75;
+}
+
+.upload-supported {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.upload-spinner {
+    animation: upload-spin 1s linear infinite;
+}
+
+@keyframes upload-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Chat messages */
+
+.message-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.message-row-user {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    display: grid;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 11px;
+}
+
+.assistant-avatar {
+    border: 1px solid #e5e0ff;
+    background: #f0edff;
+    color: #6d5bd0;
+}
+
+.user-avatar {
+    border: 1px solid #dbeafe;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.message-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.message-row-user .message-content {
+    align-items: flex-end;
+}
+
+.message-author {
+    color: #52576a;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.message-card {
+    width: fit-content;
+    max-width: 100%;
+    padding: 15px 17px;
+    border: 1px solid #e8eaf1;
+    border-radius: 4px 13px 13px 13px;
+    background: #ffffff;
+    color: #35394c;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.user-message-card {
+    border-color: #e5e0ff;
+    border-radius: 13px 4px 13px 13px;
+    background: #f5f3ff;
+    color: #34304e;
+}
+
+.message-markdown> :first-child {
+    margin-top: 0;
+}
+
+.message-markdown> :last-child {
+    margin-bottom: 0;
+}
+
+.message-markdown p {
+    margin: 0 0 11px;
+}
+
+.message-markdown h1,
+.message-markdown h2,
+.message-markdown h3,
+.message-markdown h4 {
+    margin: 16px 0 8px;
+    color: #25283a;
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.5;
+}
+
+.message-markdown ul,
+.message-markdown ol {
+    margin: 8px 0 12px;
+    padding-left: 23px;
+}
+
+.message-markdown li {
+    padding-left: 3px;
+    margin: 4px 0;
+}
+
+.message-markdown blockquote {
+    margin: 12px 0;
+    padding: 9px 13px;
+    border-left: 3px solid #a89af0;
+    background: #f7f6ff;
+    color: #5c6072;
+}
+
+.message-markdown code {
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: #f0f1f6;
+    color: #5c48b7;
+    font-size: 11px;
+}
+
+.message-markdown pre {
+    max-width: 100%;
+    padding: 13px;
+    border: 1px solid #e8eaf1;
+    border-radius: 9px;
+    background: #f8f9fc;
+    overflow-x: auto;
+}
+
+.message-markdown pre code {
+    padding: 0;
+    background: transparent;
+    color: #35394c;
+}
+
+.message-markdown a {
+    color: #6553c2;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.message-markdown hr {
+    margin: 15px 0;
+    border: 0;
+    border-top: 1px solid #e8eaf1;
+}
+
+.message-markdown table {
+    display: block;
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+}
+
+.message-markdown th,
+.message-markdown td {
+    padding: 8px 10px;
+    border: 1px solid #e8eaf1;
+    text-align: left;
+}
+
+.message-markdown th {
+    background: #f8f9fc;
+    font-weight: 700;
+}
+
+
+/* Retrieved evidence */
+
+.sources-section {
+    width: 100%;
+    max-width: 680px;
+}
+
+.sources-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 33px;
+    padding: 6px 9px;
+    border: 1px solid #e6e3f8;
+    border-radius: 8px;
+    background: #faf9ff;
+    color: #6553b7;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.sources-toggle:hover {
+    background: #f1eeff;
+}
+
+.retrieved-count {
+    padding-left: 7px;
+    border-left: 1px solid #ddd6fe;
+    color: #8177b9;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.source-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 10px;
+}
+
+.source-card {
+    padding: 12px;
+    border: 1px solid #e8eaf1;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.source-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.source-file-icon {
+    display: grid;
+    flex-shrink: 0;
+    width: 34px;
+    height: 36px;
+    place-items: center;
+    border-radius: 8px;
+    background: #f1efff;
+    color: #7462cd;
+}
+
+.source-file-details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.source-filename {
+    overflow: hidden;
+    color: #35394c;
+    font-size: 11px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.source-location {
+    color: #8a8ea1;
+    font-size: 10px;
+}
+
+.source-score {
+    flex-shrink: 0;
+    padding: 4px 6px;
+    border: 1px solid #e8eaf1;
+    border-radius: 6px;
+    background: #f8f9fc;
+    color: #777c91;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+}
+
+.source-snippet {
+    margin-top: 11px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f1f5;
+    color: #666b7e;
+    font-size: 11px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+    .message-row {
+        gap: 8px;
+    }
+
+    .message-avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    .message-card {
+        padding: 12px;
+        font-size: 12px;
+    }
+
+    .source-card {
+        padding: 10px;
+    }
+}
