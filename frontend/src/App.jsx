@@ -3,6 +3,7 @@ import {
   BrainCircuit,
   FileText,
   MessageSquare,
+  Plus,
   Send,
   Sparkles,
   Trash2,
@@ -36,7 +37,6 @@ function App() {
   const [error, setError] = useState("");
 
   const messagesEndRef = useRef(null);
-  const chatGenerationRef = useRef(0);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -53,16 +53,13 @@ function App() {
     try {
       const result = await uploadDocument(file);
 
-      chatGenerationRef.current += 1;
-      setDocuments([
+      setDocuments((previous) => [
+        ...previous,
         {
           ...result,
           filename: result.filename || file.name,
         },
       ]);
-      setMessages([welcomeMessage]);
-      setQuestion("");
-      setSending(false);
 
       setNotice(
         `${result.filename || file.name} indexed successfully. ${result.chunks_created
@@ -97,15 +94,10 @@ function App() {
       },
     ]);
 
-    const chatGeneration = chatGenerationRef.current;
     setSending(true);
 
     try {
       const response = await askQuestion(submittedQuestion);
-
-      if (chatGeneration !== chatGenerationRef.current) {
-        return;
-      }
 
       setMessages((previous) => [
         ...previous,
@@ -117,14 +109,17 @@ function App() {
         },
       ]);
     } catch (err) {
-      if (chatGeneration === chatGenerationRef.current) {
-        setError(err.message || "Unable to generate an answer.");
-      }
+      setError(err.message || "Unable to generate an answer.");
     } finally {
-      if (chatGeneration === chatGenerationRef.current) {
-        setSending(false);
-      }
+      setSending(false);
     }
+  }
+
+  function startNewChat() {
+    setMessages([welcomeMessage]);
+    setQuestion("");
+    setError("");
+    setNotice("");
   }
 
   function removeNotice() {
@@ -145,6 +140,11 @@ function App() {
             <p>DOCUMENT INTELLIGENCE</p>
           </div>
         </div>
+
+        <button className="new-chat-button" onClick={startNewChat}>
+          <Plus size={17} />
+          <span>New conversation</span>
+        </button>
 
         <div className="sidebar-section">
           <div className="section-heading">

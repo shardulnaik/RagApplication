@@ -2,10 +2,9 @@ from pathlib import Path
 
 from llama_index.core import StorageContext, VectorStoreIndex
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.vector_stores.qdrant import QdrantVectorStore
-from qdrant_client import QdrantClient, models
+from qdrant_client import QdrantClient
 
 from app.config import (
     GEMINI_API_KEY,
@@ -95,71 +94,12 @@ def index_documents(documents):
         vector_store=vector_store
     )
 
-    active_document_id = documents[0].metadata["active_document_id"]
-    client = get_qdrant_client()
-
-    try:
-        VectorStoreIndex(
-            nodes=nodes,
-            storage_context=storage_context,
-            embed_model=embedding_model,
-            show_progress=False,
-        )
-    except Exception:
-        if client.collection_exists(QDRANT_COLLECTION):
-            client.delete(
-                collection_name=QDRANT_COLLECTION,
-                points_selector=models.FilterSelector(
-                    filter=models.Filter(
-                        must=[
-                            models.FieldCondition(
-                                key="active_document_id",
-                                match=models.MatchValue(
-                                    value=active_document_id
-                                ),
-                            )
-                        ]
-                    )
-                ),
-                wait=True,
-            )
-        raise
-
-    try:
-        client.delete(
-            collection_name=QDRANT_COLLECTION,
-            points_selector=models.FilterSelector(
-                filter=models.Filter(
-                    must_not=[
-                        models.FieldCondition(
-                            key="active_document_id",
-                            match=models.MatchValue(
-                                value=active_document_id
-                            ),
-                        )
-                    ]
-                )
-            ),
-            wait=True,
-        )
-    except Exception:
-        client.delete(
-            collection_name=QDRANT_COLLECTION,
-            points_selector=models.FilterSelector(
-                filter=models.Filter(
-                    must=[
-                        models.FieldCondition(
-                            key="active_document_id",
-                            match=models.MatchValue(
-                                value=active_document_id
-                            ),
-                        )
-                    ]
-                )
-            ),
-            wait=True,
-        )
-        raise
+    VectorStoreIndex(
+        nodes=nodes,
+        storage_context=storage_context,
+        embed_model=embedding_model,
+        show_progress=False,
+    )
 
     return len(nodes)
 
@@ -182,15 +122,7 @@ def retrieve_chunks(question: str, top_k: int = 5):
     )
 
     retriever = index.as_retriever(
-        similarity_top_k=top_k,
-        filters=MetadataFilters(
-            filters=[
-                MetadataFilter(
-                    key="active_document",
-                    value="true",
-                )
-            ]
-        ),
+        similarity_top_k=top_k
     )
 
     results = retriever.retrieve(question)
