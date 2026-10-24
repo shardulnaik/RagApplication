@@ -4,7 +4,8 @@ from pathlib import Path
 
 from llama_index.core import SimpleDirectoryReader
 
-from app.rag.retrieval import index_documents
+from app.config import QDRANT_COLLECTION
+from app.rag.retrieval import get_qdrant_client, index_documents
 
 
 def ingest_document(filename: str, file_bytes: bytes):
@@ -64,6 +65,16 @@ def ingest_document(filename: str, file_bytes: bytes):
             }
         )
 
+    # Remove previous document vectors from the active collection.
+    # This application supports one active document at a time.
+    client = get_qdrant_client()
+
+    if client.collection_exists(QDRANT_COLLECTION):
+        client.delete_collection(
+            collection_name=QDRANT_COLLECTION
+        )
+
+    # Index only the newly uploaded document.
     chunks_created = index_documents(documents)
 
     return {
