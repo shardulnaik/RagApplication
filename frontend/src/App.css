@@ -49,26 +49,6 @@
   letter-spacing: 1.4px;
 }
 
-.new-chat-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  width: 100%;
-  min-height: 43px;
-  border: 1px solid #374151;
-  border-radius: 10px;
-  background: #1f2937;
-  color: #f9fafb;
-  font-size: 13px;
-  font-weight: 600;
-  transition: background 160ms ease;
-}
-
-.new-chat-button:hover {
-  background: #303b4f;
-}
-
 .sidebar-section {
   flex: 1;
   min-height: 0;
@@ -241,19 +221,6 @@
 .breadcrumb strong {
   color: var(--text);
   font-weight: 650;
-}
-
-.model-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  color: var(--muted);
-  background: var(--surface);
-  font-size: 11px;
-  font-weight: 550;
 }
 
 .chat-workspace {
@@ -562,15 +529,10 @@
   }
 
   .brand>div:last-child,
-  .new-chat-button span,
   .section-heading,
   .document-list,
   .sidebar-footer>div:last-child {
     display: none;
-  }
-
-  .new-chat-button {
-    min-height: 40px;
   }
 
   .sidebar-section {
@@ -588,11 +550,6 @@
 
   .breadcrumb {
     gap: 6px;
-    font-size: 10px;
-  }
-
-  .model-badge {
-    padding: 7px 9px;
     font-size: 10px;
   }
 

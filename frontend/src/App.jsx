@@ -3,10 +3,8 @@ import {
   BrainCircuit,
   FileText,
   MessageSquare,
-  Plus,
   Send,
   Sparkles,
-  Trash2,
 } from "lucide-react";
 
 import DocumentUpload from "./components/DocumentUpload";
@@ -53,13 +51,14 @@ function App() {
     try {
       const result = await uploadDocument(file);
 
-      setDocuments((previous) => [
-        ...previous,
+      setDocuments([
         {
           ...result,
           filename: result.filename || file.name,
         },
       ]);
+      setMessages([welcomeMessage]);
+      setQuestion("");
 
       setNotice(
         `${result.filename || file.name} indexed successfully. ${result.chunks_created
@@ -115,13 +114,6 @@ function App() {
     }
   }
 
-  function startNewChat() {
-    setMessages([welcomeMessage]);
-    setQuestion("");
-    setError("");
-    setNotice("");
-  }
-
   function removeNotice() {
     setNotice("");
     setError("");
@@ -140,11 +132,6 @@ function App() {
             <p>DOCUMENT INTELLIGENCE</p>
           </div>
         </div>
-
-        <button className="new-chat-button" onClick={startNewChat}>
-          <Plus size={17} />
-          <span>New conversation</span>
-        </button>
 
         <div className="sidebar-section">
           <div className="section-heading">
@@ -206,10 +193,6 @@ function App() {
             <strong>Document assistant</strong>
           </div>
 
-          <div className="model-badge">
-            <span className="model-dot" />
-            Gemini powered
-          </div>
         </header>
 
         <section className="chat-workspace">
