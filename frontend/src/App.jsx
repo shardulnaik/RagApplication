@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { FileText, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  FileText,
+  Files,
+  Info,
+  Search,
+  Send,
+  Sparkles,
+} from "lucide-react";
 
 import DocumentUpload from "./components/DocumentUpload";
 import MessageBubble from "./components/MessageBubble";
@@ -7,7 +16,11 @@ import { askQuestion, uploadDocument } from "./services/api";
 import "./App.css";
 
 function App() {
-  const [documents, setDocuments] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(
+    () => window.localStorage.getItem("rag-theme") === "dark"
+  );
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [currentUpload, setCurrentUpload] = useState(null);
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -16,6 +29,10 @@ function App() {
   const [error, setError] = useState("");
 
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    window.localStorage.setItem("rag-theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -32,12 +49,10 @@ function App() {
     try {
       const result = await uploadDocument(file);
 
-      setDocuments([
-        {
-          ...result,
-          filename: result.filename || file.name,
-        },
-      ]);
+      setCurrentUpload({
+        ...result,
+        filename: result.filename || file.name,
+      });
       setMessages([]);
       setQuestion("");
 
@@ -101,7 +116,7 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isDarkMode ? "theme-dark" : "theme-light"}`}>
       <aside className="sidebar">
         <div className="brand">
           <h1>RagApplication</h1>
@@ -109,7 +124,7 @@ function App() {
 
         <div className="sidebar-section">
           <div className="section-heading">
-            <span>Current Upload</span>
+            <span>Your document</span>
           </div>
 
           <DocumentUpload
@@ -117,39 +132,58 @@ function App() {
             uploading={uploading}
           />
 
-          <div className="document-list">
-            {documents.length === 0 ? (
-              <div className="empty-documents">
-                <FileText size={22} />
-                <p>No upload yet</p>
-                <span>Your uploaded file will appear here.</span>
+          <div className="section-heading current-upload-heading">
+            <span>Current upload</span>
+          </div>
+
+          <div className="current-upload-panel">
+            {currentUpload ? (
+              <div
+                className="document-item"
+                title={currentUpload.filename}
+              >
+                <div className="document-icon">
+                  <FileText size={17} />
+                </div>
+
+                <div className="document-details">
+                  <span className="document-name">
+                    {currentUpload.filename}
+                  </span>
+                  <span className="document-meta">
+                    {currentUpload.chunks_created} chunks indexed
+                  </span>
+                </div>
               </div>
             ) : (
-              documents.map((document, index) => (
-                <div
-                  className="document-item"
-                  key={`${document.document_id}-${index}`}
-                  title={document.filename}
-                >
-                  <div className="document-icon">
-                    <FileText size={17} />
-                  </div>
-
-                  <div className="document-details">
-                    <span className="document-name">
-                      {document.filename}
-                    </span>
-                    <span className="document-meta">
-                      {document.chunks_created} chunks indexed
-                    </span>
-                  </div>
-                </div>
-              ))
+              <div className="empty-documents">
+                <p>No upload yet</p>
+              </div>
             )}
           </div>
         </div>
 
         <div className="sidebar-footer">
+          <button
+            className="sidebar-tool"
+            type="button"
+            onClick={() => setIsDarkMode((current) => !current)}
+            aria-label="Toggle dark mode"
+            aria-pressed={isDarkMode}
+          >
+            <span className="theme-toggle-track" aria-hidden="true">
+              <span className="theme-toggle-knob" />
+            </span>
+            <span>Dark mode</span>
+          </button>
+          <button
+            className="sidebar-tool"
+            type="button"
+            onClick={() => setAboutOpen(true)}
+          >
+            <Info size={17} />
+            <span>About this website</span>
+          </button>
           <div className="status-indicator" />
           <div>
             <strong>Local workspace</strong>
@@ -233,6 +267,65 @@ function App() {
           </div>
         </section>
       </main>
+
+      {aboutOpen && (
+        <div className="about-backdrop">
+          <section
+            className="about-dialog"
+            role="region"
+            aria-labelledby="about-title"
+          >
+            <div className="about-dialog-header">
+              <button
+                className="about-back"
+                type="button"
+                onClick={() => setAboutOpen(false)}
+              >
+                <ArrowLeft size={17} />
+                <span>Back</span>
+              </button>
+              <div>
+                <h2 id="about-title">How this app works</h2>
+                <p>From your file to a source-backed answer.</p>
+              </div>
+            </div>
+
+            <div
+              className="rag-flow"
+              aria-label="File to chunks to Qdrant search to Gemini answer"
+            >
+              <div className="rag-flow-step">
+                <FileText size={18} />
+                <span>Your file</span>
+              </div>
+              <ArrowRight className="rag-flow-arrow" size={16} aria-hidden="true" />
+              <div className="rag-flow-step">
+                <Files size={18} />
+                <span>Text chunks</span>
+              </div>
+              <ArrowRight className="rag-flow-arrow" size={16} aria-hidden="true" />
+              <div className="rag-flow-step">
+                <Search size={18} />
+                <span>Qdrant search</span>
+              </div>
+              <ArrowRight className="rag-flow-arrow" size={16} aria-hidden="true" />
+              <div className="rag-flow-step">
+                <Sparkles size={18} />
+                <span>Gemini answer</span>
+              </div>
+            </div>
+
+            <ol className="about-explanation">
+              <li>Upload one PDF or TXT file.</li>
+              <li>The app extracts its text and splits it into chunks.</li>
+              <li>Those chunks are indexed in Qdrant.</li>
+              <li>Your question retrieves the most relevant chunks.</li>
+              <li>Gemini uses those passages to write an answer.</li>
+              <li>The answer includes the retrieved source references.</li>
+            </ol>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

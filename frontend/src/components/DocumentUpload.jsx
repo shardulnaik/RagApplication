@@ -38,7 +38,7 @@ function DocumentUpload({ onUpload, uploading }) {
                 )}
 
                 <span>
-                    {uploading ? "Processing document..." : "Upload document"}
+                    {uploading ? "Processing file..." : "Upload file"}
                 </span>
             </button>
 
