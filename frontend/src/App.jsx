@@ -109,7 +109,7 @@ function App() {
 
         <div className="sidebar-section">
           <div className="section-heading">
-            <span>Your documents</span>
+            <span>Current Upload</span>
           </div>
 
           <DocumentUpload
@@ -121,8 +121,8 @@ function App() {
             {documents.length === 0 ? (
               <div className="empty-documents">
                 <FileText size={22} />
-                <p>No documents yet</p>
-                <span>Upload a file to get started.</span>
+                <p>No upload yet</p>
+                <span>Your uploaded file will appear here.</span>
               </div>
             ) : (
               documents.map((document, index) => (
@@ -187,7 +187,7 @@ function App() {
                   <div className="typing-dot" />
                   <div className="typing-dot" />
                   <div className="typing-dot" />
-                  <span>Searching documents and generating an answer...</span>
+                  <span>Searching your document and generating an answer...</span>
                 </div>
               )}
 
@@ -210,7 +210,7 @@ function App() {
                     event.currentTarget.form?.requestSubmit();
                   }
                 }}
-                placeholder="Ask a question about your documents..."
+                placeholder="Ask a question about your document..."
                 rows={2}
                 maxLength={4000}
                 disabled={sending}
@@ -230,10 +230,6 @@ function App() {
               </div>
             </form>
 
-            <p className="disclaimer">
-              Answers are based on passages retrieved from your uploaded
-              document. Check the cited sources for details.
-            </p>
           </div>
         </section>
       </main>
