@@ -1,33 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  BrainCircuit,
-  FileText,
-  MessageSquare,
-  Send,
-  Sparkles,
-} from "lucide-react";
+import { FileText, Send } from "lucide-react";
 
 import DocumentUpload from "./components/DocumentUpload";
 import MessageBubble from "./components/MessageBubble";
 import { askQuestion, uploadDocument } from "./services/api";
 import "./App.css";
 
-const welcomeMessage = {
-  role: "assistant",
-  content:
-    "Welcome to KnowledgeRAG. Upload your documents and ask questions about their contents. I'll retrieve relevant passages and provide answers with source references.",
-  sources: [],
-};
-
-const suggestedQuestions = [
-  "Summarize the main points",
-  "What are the key findings?",
-  "Explain the most important concepts",
-];
-
 function App() {
   const [documents, setDocuments] = useState([]);
-  const [messages, setMessages] = useState([welcomeMessage]);
+  const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
   const [uploading, setUploading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -57,7 +38,7 @@ function App() {
           filename: result.filename || file.name,
         },
       ]);
-      setMessages([welcomeMessage]);
+      setMessages([]);
       setQuestion("");
 
       setNotice(
@@ -123,20 +104,12 @@ function App() {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-icon">
-            <BrainCircuit size={25} />
-          </div>
-
-          <div>
-            <h1>KnowledgeRAG</h1>
-            <p>DOCUMENT INTELLIGENCE</p>
-          </div>
+          <h1>RagApplication</h1>
         </div>
 
         <div className="sidebar-section">
           <div className="section-heading">
             <span>Your documents</span>
-            <span className="document-count">{documents.length}</span>
           </div>
 
           <DocumentUpload
@@ -186,30 +159,7 @@ function App() {
       </aside>
 
       <main className="main-workspace">
-        <header className="topbar">
-          <div className="breadcrumb">
-            <span>Workspace</span>
-            <span className="breadcrumb-separator">/</span>
-            <strong>Document assistant</strong>
-          </div>
-
-        </header>
-
         <section className="chat-workspace">
-          <div className="chat-heading">
-            <div className="heading-icon">
-              <Sparkles size={21} />
-            </div>
-
-            <div>
-              <h2>Ask your documents</h2>
-              <p>
-                Retrieve information, discover insights, and explore your
-                files.
-              </p>
-            </div>
-          </div>
-
           {(notice || error) && (
             <div className={error ? "notice notice-error" : "notice"}>
               <span>{error || notice}</span>
@@ -224,34 +174,6 @@ function App() {
           )}
 
           <div className="conversation">
-            {messages.length === 1 && (
-              <div className="welcome-intro">
-                <div className="welcome-icon">
-                  <MessageSquare size={25} />
-                </div>
-
-                <h3>Your documents, understood.</h3>
-
-                <p>
-                  Ask questions about your uploaded files. Answers will be
-                  generated from retrieved document passages, with source
-                  references where available.
-                </p>
-
-                <div className="suggested-questions">
-                  {suggestedQuestions.map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      type="button"
-                      onClick={() => setQuestion(suggestion)}
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             <div className="message-list">
               {messages.map((message, index) => (
                 <MessageBubble
@@ -296,11 +218,6 @@ function App() {
               />
 
               <div className="composer-bottom">
-                <span className="composer-hint">
-                  <Sparkles size={13} />
-                  Answers grounded in retrieved context
-                </span>
-
                 <button
                   type="submit"
                   className="send-button"
