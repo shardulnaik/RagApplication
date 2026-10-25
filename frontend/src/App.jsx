@@ -208,25 +208,38 @@ function App() {
           )}
 
           <div className="conversation">
-            <div className="message-list">
-              {messages.map((message, index) => (
-                <MessageBubble
-                  key={`${message.role}-${index}`}
-                  message={message}
-                />
-              ))}
+            {messages.length === 0 ? (
+              <div className="chat-empty-state">
+                <Sparkles size={20} aria-hidden="true" />
+                <p>
+                  {uploading
+                    ? "Preparing your file..."
+                    : currentUpload
+                      ? "Your document is ready. Ask a question to get started."
+                      : "Upload a file, then ask a question about it."}
+                </p>
+              </div>
+            ) : (
+              <div className="message-list">
+                {messages.map((message, index) => (
+                  <MessageBubble
+                    key={`${message.role}-${index}`}
+                    message={message}
+                  />
+                ))}
 
-              {sending && (
-                <div className="typing-indicator">
-                  <div className="typing-dot" />
-                  <div className="typing-dot" />
-                  <div className="typing-dot" />
-                  <span>Searching your document and generating an answer...</span>
-                </div>
-              )}
+                {sending && (
+                  <div className="typing-indicator">
+                    <div className="typing-dot" />
+                    <div className="typing-dot" />
+                    <div className="typing-dot" />
+                    <span>Searching your document and generating an answer...</span>
+                  </div>
+                )}
 
-              <div ref={messagesEndRef} />
-            </div>
+                <div ref={messagesEndRef} />
+              </div>
+            )}
           </div>
 
           <div className="composer-area">
