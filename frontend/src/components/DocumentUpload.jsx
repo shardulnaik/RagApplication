@@ -19,7 +19,7 @@ function DocumentUpload({ onUpload, uploading }) {
             <input
                 ref={inputRef}
                 type="file"
-                accept=".pdf,.docx,.txt"
+                accept=".pdf,.txt"
                 onChange={handleFileChange}
                 disabled={uploading}
                 hidden
@@ -44,7 +44,7 @@ function DocumentUpload({ onUpload, uploading }) {
 
             <div className="upload-supported">
                 <FileText size={13} />
-                <span>PDF, DOCX, TXT · Max 20 MB</span>
+                <span>PDF, TXT · Max 20 MB</span>
             </div>
         </div>
     );

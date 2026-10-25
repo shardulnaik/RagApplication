@@ -231,8 +231,8 @@ function App() {
             </form>
 
             <p className="disclaimer">
-              AI-generated answers can be inaccurate. Verify important
-              information against the original documents.
+              Answers are based on passages retrieved from your uploaded
+              document. Check the cited sources for details.
             </p>
           </div>
         </section>
