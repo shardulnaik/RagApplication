@@ -1,4 +1,4 @@
-# KnowledgeRAG
+# RAGApplication
 
 A document intelligence application built using Retrieval-Augmented Generation.
 
