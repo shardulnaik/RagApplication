@@ -99,6 +99,7 @@ function App() {
         {
           role: "assistant",
           content: response.answer,
+          animate: true,
           sources: response.sources || [],
           retrievedChunks: response.retrieved_chunks ?? 0,
         },

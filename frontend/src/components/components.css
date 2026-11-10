@@ -136,6 +136,20 @@
     margin-bottom: 0;
 }
 
+.message-markdown-streaming::after {
+    content: "▋";
+    display: inline-block;
+    margin-left: 2px;
+    color: currentColor;
+    animation: message-cursor-blink 0.9s steps(2, start) infinite;
+}
+
+@keyframes message-cursor-blink {
+    to {
+        visibility: hidden;
+    }
+}
+
 .message-markdown p {
     margin: 0 0 11px;
 }

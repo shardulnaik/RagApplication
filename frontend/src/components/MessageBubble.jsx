@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import {
     Bot,
@@ -13,9 +13,34 @@ function MessageBubble({ message }) {
     const [showSources, setShowSources] = useState(false);
 
     const isUser = message.role === "user";
+    const fullContent = message.content || "";
+    const [visibleContent, setVisibleContent] = useState(
+        message.animate && !isUser ? "" : fullContent
+    );
     const sources = Array.isArray(message.sources)
         ? message.sources
         : [];
+
+    useEffect(() => {
+        if (!message.animate || isUser) {
+            setVisibleContent(fullContent);
+            return undefined;
+        }
+
+        let position = 0;
+        setVisibleContent("");
+
+        const timer = window.setInterval(() => {
+            position = Math.min(position + 5, fullContent.length);
+            setVisibleContent(fullContent.slice(0, position));
+
+            if (position >= fullContent.length) {
+                window.clearInterval(timer);
+            }
+        }, 16);
+
+        return () => window.clearInterval(timer);
+    }, [fullContent, isUser, message.animate]);
 
     return (
         <article
@@ -32,8 +57,14 @@ function MessageBubble({ message }) {
                 </div>
 
                 <div className={`message-card ${isUser ? "user-message-card" : ""}`}>
-                    <div className="message-markdown">
-                        <ReactMarkdown>{message.content || ""}</ReactMarkdown>
+                    <div
+                        className={`message-markdown ${
+                            message.animate && visibleContent.length < fullContent.length
+                                ? "message-markdown-streaming"
+                                : ""
+                        }`}
+                    >
+                        <ReactMarkdown>{visibleContent}</ReactMarkdown>
                     </div>
                 </div>
 
